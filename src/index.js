@@ -1,59 +1,53 @@
+import axios from 'axios';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-class Square extends React.Component {
-  render() {
-    return (
-      <button className="square">
-        {/* TODO */}
-      </button>
+class App extends React.Component {
+  state = {
+    selectedFile: null
+  };
+
+  onFileChange = event => {
+    // Update the state 
+    this.setState({ selectedFile: event.target.files[0] });
+  };
+
+  onFileUpload = () => {
+    const formData = new FormData();
+    formData.append(
+      "myFile",
+      this.state.selectedFile,
+      this.state.selectedFile.name
     );
-  }
-}
-
-class Board extends React.Component {
-  renderSquare(i) {
-    return <Square />;
-  }
+    console.log(this.state.selectedFile);
+    axios.post("api/uploadfile", formData)
+        .then(function(response){
+          console.log(response);
+        })
+        .catch(function(response){
+          console.log(response);
+        });
+  };
 
   render() {
-    const status = 'Next player: X';
-
     return (
-      <div>
-        <div className="status">{status}</div>
-        <div className="board-row">
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
-          {this.renderSquare(5)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
-        </div>
+      <div className="app-container">
+        <input type="file" onChange={this.onFileChange} />
+        <br />
+        <button onClick={this.onFileUpload}>Upload config file</button>
+        <br />
+        <ConfigTable />
       </div>
     );
   }
 }
 
-class Game extends React.Component {
+class ConfigTable extends React.Component {
   render() {
     return (
-      <div className="game">
-        <div className="game-board">
-          <Board />
-        </div>
-        <div className="game-info">
-          <div>{/* status */}</div>
-          <ol>{/* TODO */}</ol>
-        </div>
+      <div className="config-container">
+        <div>config table here</div>
       </div>
     );
   }
@@ -62,6 +56,6 @@ class Game extends React.Component {
 // ========================================
 
 ReactDOM.render(
-  <Game />,
+  <App />,
   document.getElementById('root')
 );
