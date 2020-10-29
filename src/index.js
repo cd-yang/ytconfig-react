@@ -3,6 +3,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
+// eslint-disable-next-line no-unused-vars
+import mockData from './mock';
+
 class App extends React.Component {
   state = {
     selectedFile: null
@@ -21,13 +24,13 @@ class App extends React.Component {
       this.state.selectedFile.name
     );
     console.log(this.state.selectedFile);
-    axios.post("api/uploadfile", formData)
-        .then(function(response){
-          console.log(response);
-        })
-        .catch(function(response){
-          console.log(response);
-        });
+    axios.post("/api/uploadfile", formData)
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (response) {
+        console.log(response);
+      });
   };
 
   render() {
