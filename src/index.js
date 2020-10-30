@@ -53,9 +53,9 @@ class App extends React.Component {
 class ConfigTable extends React.Component {
   render() {
     const tableData = this.props.tbData;
-    const listItems = tableData.map((number) =>
-      <li key={number.toString()}>
-        {number}
+    const listItems = tableData.map((item) =>
+      <li key={item.id}>
+        {item.name}
       </li>
     );
     return (
