@@ -8,7 +8,8 @@ import mockData from './mock';
 
 class App extends React.Component {
   state = {
-    selectedFile: null
+    selectedFile: null,
+    tableData: null,
   };
 
   onFileChange = event => {
@@ -23,12 +24,12 @@ class App extends React.Component {
       this.state.selectedFile,
       this.state.selectedFile.name
     );
-    console.log(this.state.selectedFile);
     axios.post("/api/uploadfile", formData)
-      .then(function (response) {
+      .then((response) => {
         console.log(response);
+        this.setState({ tableData: response.data.data });
       })
-      .catch(function (response) {
+      .catch((response) => {
         console.log(response);
       });
   };
@@ -40,7 +41,10 @@ class App extends React.Component {
         <br />
         <button onClick={this.onFileUpload}>Upload config file</button>
         <br />
-        <ConfigTable />
+        {this.state.tableData
+          ? <ConfigTable tbData={this.state.tableData}></ConfigTable>
+          : <div>please upload file</div>
+        }
       </div>
     );
   }
@@ -48,9 +52,15 @@ class App extends React.Component {
 
 class ConfigTable extends React.Component {
   render() {
+    const tableData = this.props.tbData;
+    const listItems = tableData.map((number) =>
+      <li key={number.toString()}>
+        {number}
+      </li>
+    );
     return (
       <div className="config-container">
-        <div>config table here</div>
+        <ul>{listItems}</ul>
       </div>
     );
   }

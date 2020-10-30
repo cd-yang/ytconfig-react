@@ -1,10 +1,13 @@
 import Mock from 'mockjs';
 
 let Random = Mock.Random
-const numebr = Random.integer(18, 30)
-const county = Random.county(true)
-const name = Random.cname(true)
-
+const num = Random.integer(3, 7);
+let returnValue = [];
+for (let i = 0; i < num; i++) {
+    const id = Random.guid();
+    const name = Random.cword(3, 5);
+    returnValue.push([name, id]);
+}
 Mock.mock("/api/uploadfile", {
-    "data": [name, county, numebr]
+    "data": returnValue
 })
