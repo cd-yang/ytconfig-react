@@ -2,6 +2,8 @@ import axios from 'axios';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import { Table } from 'antd';
+import 'antd/dist/antd.css';
 
 // eslint-disable-next-line no-unused-vars
 import mockData from './mock';
@@ -53,14 +55,9 @@ class App extends React.Component {
 class ConfigTable extends React.Component {
   render() {
     const tableData = this.props.tbData;
-    const listItems = tableData.map((item) =>
-      <li key={item.id}>
-        {item.name}
-      </li>
-    );
     return (
       <div className="config-container">
-        <ul>{listItems}</ul>
+        <Table dataSource={tableData} columns={columns} />
       </div>
     );
   }
@@ -72,3 +69,18 @@ ReactDOM.render(
   <App />,
   document.getElementById('root')
 );
+
+const columns = [
+  {
+    title: 'Name',
+    dataIndex: 'name',
+    key: 'name',
+    // eslint-disable-next-line jsx-a11y/anchor-is-valid
+    render: text => <a>{text}</a>,
+  },
+  {
+    title: 'Guid',
+    dataIndex: 'id',
+    key: 'id',
+  },
+];
