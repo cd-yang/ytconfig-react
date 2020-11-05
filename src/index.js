@@ -17,11 +17,19 @@ class App extends React.Component {
   };
 
   onFileChange = event => {
+    event.stopPropagation();
+    event.preventDefault();
+
     // Update the state 
-    this.setState({ selectedFile: event.target.files[0] });
+    let file = event.target.files[0];
+    console.log(file);
+    this.setState({ selectedFile: file }, this.onFileUpload);
   };
 
   onFileUpload = () => {
+    if (this.state.selectedFile === undefined || this.state.selectedFile === null
+      || this.state.selectedFile.name === undefined || this.state.selectedFile.name === null)
+      return;
     const formData = new FormData();
     formData.append(
       "myFile",
@@ -42,11 +50,14 @@ class App extends React.Component {
     return (
       <Layout className="app-container">
         <Header>
-          {/* <input type="file" onChange={this.onFileChange} />
-          <br />
-          <Button onClick={this.onFileUpload}>Upload config file</Button> */}
           <Menu theme="dark" mode="horizontal">
-            <Menu.Item key="1">加载配置</Menu.Item>
+            <Menu.Item key="1" onClick={() => { this.upload.click() }}>
+              <input type="file" id="file" style={{ display: "none" }}
+                directory="" webkitdirectory=""
+                ref={(ref) => this.upload = ref}
+                onChange={this.onFileChange.bind(this)} />
+              加载配置
+            </Menu.Item>
             <Menu.Item key="2">加载 Excel</Menu.Item>
             <Menu.Item key="3">设置配置</Menu.Item>
             <Menu.Item key="4">设置模板</Menu.Item>
