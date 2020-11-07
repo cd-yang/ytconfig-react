@@ -5,6 +5,8 @@ import './index.css';
 import { Table, Button, Layout, Menu } from 'antd';
 import 'antd/dist/antd.css';
 
+import { Subsystem } from './components/Subsystem'
+
 // eslint-disable-next-line no-unused-vars
 import mockData from './mock';
 
@@ -13,7 +15,7 @@ const { Header, Content, Footer } = Layout;
 class App extends React.Component {
   state = {
     selectedFile: null,
-    tableData: null,
+    uploadedValidProject: false,
   };
 
   onFileChange = event => {
@@ -39,10 +41,14 @@ class App extends React.Component {
     axios.post("/api/uploadfile", formData)
       .then((response) => {
         console.log(response);
-        this.setState({ tableData: response.data.data });
+        this.setState({ uploadedValidProject: response.data.isprojectvalid });
+        if (response.data.isprojectvalid === false)
+          alert("工程文件错误");
       })
       .catch((response) => {
         console.log(response);
+        this.setState({ uploadedValidProject: false });
+        alert("文件上传错误");
       });
   };
 
@@ -66,9 +72,9 @@ class App extends React.Component {
           </Menu>
         </Header>
         <Content>
-          {this.state.tableData
-            ? <ConfigTable tbData={this.state.tableData}></ConfigTable>
-            : <h1 className="emptyProjectInfo">请打开配置文件所在文件夹</h1>
+          {this.state.uploadedValidProject
+            ? <Subsystem></Subsystem>
+            : <h1 className="emptyProjectInfo">请上传配置文件所在文件夹</h1>
           }
         </Content>
         <Footer style={{ textAlign: "center" }}>ShareE ©2020 YCD</Footer>
@@ -77,16 +83,6 @@ class App extends React.Component {
   }
 }
 
-class ConfigTable extends React.Component {
-  render() {
-    const tableData = this.props.tbData;
-    return (
-      <div className="config-container">
-        <Table dataSource={tableData} columns={columns} pagination={false} />
-      </div>
-    );
-  }
-}
 
 // ========================================
 
@@ -95,17 +91,3 @@ ReactDOM.render(
   document.getElementById('root')
 );
 
-const columns = [
-  {
-    title: 'Name',
-    dataIndex: 'name',
-    key: 'name',
-    // eslint-disable-next-line jsx-a11y/anchor-is-valid
-    render: text => <a>{text}</a>,
-  },
-  {
-    title: 'Guid',
-    dataIndex: 'id',
-    key: 'id',
-  },
-];
