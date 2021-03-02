@@ -8,7 +8,7 @@ import 'antd/dist/antd.css';
 import { Subsystem } from './components/Subsystem'
 
 // eslint-disable-next-line no-unused-vars
-import mockData from './mock';
+// import mockData from './mock';
 
 const { Header, Content, Footer } = Layout;
 
@@ -38,7 +38,7 @@ class App extends React.Component {
       this.state.selectedFile,
       this.state.selectedFile.name
     );
-    axios.post("/api/uploadfile", formData)
+    axios.post("http://localhost:5000/WeatherForecast", formData)
       .then((response) => {
         console.log(response);
         this.setState({ uploadedValidProject: response.data.isprojectvalid });
